@@ -7,4 +7,4 @@ import sys
 import re
 #sys.setdefaultencoding('utf-8')
 from datetime import datetime
-print('12345')
+print('123456')
