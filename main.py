@@ -2,7 +2,6 @@
 
 import os
 import subprocess
-import pymysql
 import sys
 import re
 #sys.setdefaultencoding('utf-8')
