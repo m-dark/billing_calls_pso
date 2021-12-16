@@ -1,5 +1,4 @@
 #!/usr/bin/env python3.6
-
 import os
 import subprocess
 import pymysql
@@ -9,7 +8,8 @@ import logging
 #sys.setdefaultencoding('utf-8')
 from datetime import datetime
 
-date_time = datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S")
+#date_time = datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S")
+date_time = datetime.strftime(datetime.now(), "%Y.%m.%d_%H-%M-%S")
 dir_log = '/opt/asterisk/billing_calls_pso/log/'
 log = logging.getLogger("billing_calls_pso")
 fh = logging.FileHandler(dir_log+'billing_calls_pso.log')
@@ -17,19 +17,20 @@ fh.setLevel(logging.DEBUG)
 fh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] - %(name)s: %(message)s"))
 log.addHandler(fh)
 log.setLevel(logging.DEBUG)
-log.info('Start')
+log.info('Start "'+sys.argv[5]+'"')
 
 array_argv = []
-outcid = set(['all'])
+outcid_argv = set([])
+outcid_db = set([])
 
 def check_number(number):
-    result_number=re.match(r'(('all')|([3][4][3][23]\d{6})|([78][3][4][3][23]\d{6})|([23]\d{6}))$', number)
+    result_number=re.match(r'((all)|([3][4][3][23]\d{6})|([78][3][4][3][23]\d{6})|([23]\d{6}))$', number)
     if result_number is None:
         print('Не верный формат номера(ов)! '+number)
         log.error('Не верный формат номера(ов)! '+number)
         sys.exit()
     else:
-        outcid.add(number)
+        outcid_argv.add(number)
 
 for param in sys.argv:
     array_argv.append(param)
@@ -67,21 +68,31 @@ cursor_outcid = asteriskdb.cursor()
 cursor_outcid.execute("SELECT outcid FROM trunks WHERE outcid != ''")
 if cursor_outcid != '':
     for row_outcid in cursor_outcid:
-        if row_outcid[0] not in outcid:
-            outcid.add(row_outcid[0])
+        if row_outcid[0] not in outcid_db:
+            outcid_db.add(row_outcid[0])
 else:
     print('Error_01: На транках не настроены городские номера!')
     log.error('Error_01: На транках не настроены городские номера!')
 cursor_outcid.close()
+asteriskdb.close()
 
-for cid in outcid:
-    asteriskcdrdb = pymysql.connect(host="localhost", user="root", passwd="", db="asteriskcdrdb", charset='utf8')
+asteriskcdrdb = pymysql.connect(host="localhost", user="root", passwd="", db="asteriskcdrdb", charset='utf8')
 cursor = asteriskcdrdb.cursor()
-if array[5]=='all':
-    cursor.execute("SELECT calldate, cnum, lastdata, billsec FROM cdr WHERE calldate BETWEEN (%s' '%s) AND (%s' '%s) AND (LENGTH(cnum) < 6) AND (LENGTH(dst) > 5) AND (dst != 'hangup') AND (billsec != '0') AND (lastdata != '')", (array[1], array[2], array[3], array[4]))
-    select src,dst,billsec,calldate FROM cdr WHERE (LENGTH(src)) > 5 and src = 3433 and lastdata!='' and billsec>0 and disposition = 'ANSWERED' and dst > 0;
-else:
-    cursor.execute("SELECT calldate, cnum, lastdata, billsec FROM cdr WHERE calldate BETWEEN (%s' '%s) AND (%s' '%s) AND (LENGTH(cnum) < 6) AND (LENGTH(dst) > 5) AND (dst != 'hangup') AND (billsec != '0') AND (lastdata != '') AND (cnum = %s)", (array[1], array[2], array[3], array[4], array[5]))
-
+file_calls=open(str(dir_log)+str(date_time)+'.csv', 'a')
+for cid in outcid_argv:
+    if cid == 'all':
+        for number in outcid_db:
+            cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (number))
+            if cursor != '':
+                for row_cursor in cursor:
+                    file_calls.write(row_cursor[0]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+#    select src,dst,billsec,calldate FROM cdr WHERE (LENGTH(src)) > 5 and lastdata!='' and billsec>0 and disposition = 'ANSWERED' and dst > 0;
+    else:
+        cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (cid))
+        if cursor != '':
+            for row_cursor in cursor:
+                file_calls.write(row_cursor[0]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+file_calls.close()
+cursor.close()
+asteriskcdrdb.close()
 log.info('End')
-
