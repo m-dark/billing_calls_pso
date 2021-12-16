@@ -5,10 +5,8 @@ import pymysql
 import sys
 import re
 import logging
-#sys.setdefaultencoding('utf-8')
 from datetime import datetime
 
-#date_time = datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S")
 date_time = datetime.strftime(datetime.now(), "%Y.%m.%d_%H-%M-%S")
 dir_log = '/opt/asterisk/billing_calls_pso/log/'
 log = logging.getLogger("billing_calls_pso")
@@ -17,7 +15,7 @@ fh.setLevel(logging.DEBUG)
 fh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] - %(name)s: %(message)s"))
 log.addHandler(fh)
 log.setLevel(logging.DEBUG)
-log.info('Start "'+sys.argv[5]+'"')
+log.info('Start "'+sys.argv[1]+' '+sys.argv[2]+' '+sys.argv[3]+' '+sys.argv[4]+'"')
 
 array_argv = []
 outcid_argv = set([])
@@ -95,4 +93,4 @@ for cid in outcid_argv:
 file_calls.close()
 cursor.close()
 asteriskcdrdb.close()
-log.info('End')
+log.info('End "'+date_time+'.csv"')

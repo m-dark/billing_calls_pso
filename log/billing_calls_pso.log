@@ -1,4 +1,7 @@
-2021-12-16 16:25:57,671 [INFO] - billing_calls_pso: Start
-2021-12-16 16:25:57,676 [INFO] - billing_calls_pso: End
-2021-12-16 16:26:00,035 [INFO] - billing_calls_pso: Start
-2021-12-16 16:26:00,036 [ERROR] - billing_calls_pso: Не верный формат времяни конца! 23:59:591
+2021-12-16 23:48:28,477 [INFO] - billing_calls_pso: Start "all"
+2021-12-16 23:50:15,326 [INFO] - billing_calls_pso: Start "/opt/asterisk/billing_calls_pso/main.py 2021.12.01 00:00:00 2021.12.31"
+2021-12-16 23:50:15,344 [INFO] - billing_calls_pso: End
+2021-12-16 23:51:08,353 [INFO] - billing_calls_pso: Start "2021.12.01 00:00:00 2021.12.31 23:59:59"
+2021-12-16 23:51:08,373 [INFO] - billing_calls_pso: End
+2021-12-16 23:53:08,861 [INFO] - billing_calls_pso: Start "2021.12.01 00:00:00 2021.12.31 23:59:59"
+2021-12-16 23:53:08,881 [INFO] - billing_calls_pso: End "2021.12.16_23-53-08.csv"
