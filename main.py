@@ -23,11 +23,13 @@ array_argv = []
 outcid = set(['all'])
 
 def check_number(number):
-    result_number=re.match(r'(([3][4][3][23]\d{6})|([78][3][4][3][23]\d{6})|([23]\d{6}))$', number)
+    result_number=re.match(r'(('all')|([3][4][3][23]\d{6})|([78][3][4][3][23]\d{6})|([23]\d{6}))$', number)
     if result_number is None:
         print('Не верный формат номера(ов)! '+number)
         log.error('Не верный формат номера(ов)! '+number)
         sys.exit()
+    else:
+        outcid.add(number)
 
 for param in sys.argv:
     array_argv.append(param)
@@ -71,6 +73,15 @@ else:
     print('Error_01: На транках не настроены городские номера!')
     log.error('Error_01: На транках не настроены городские номера!')
 cursor_outcid.close()
+
+for cid in outcid:
+    asteriskcdrdb = pymysql.connect(host="localhost", user="root", passwd="", db="asteriskcdrdb", charset='utf8')
+cursor = asteriskcdrdb.cursor()
+if array[5]=='all':
+    cursor.execute("SELECT calldate, cnum, lastdata, billsec FROM cdr WHERE calldate BETWEEN (%s' '%s) AND (%s' '%s) AND (LENGTH(cnum) < 6) AND (LENGTH(dst) > 5) AND (dst != 'hangup') AND (billsec != '0') AND (lastdata != '')", (array[1], array[2], array[3], array[4]))
+    select src,dst,billsec,calldate FROM cdr WHERE (LENGTH(src)) > 5 and src = 3433 and lastdata!='' and billsec>0 and disposition = 'ANSWERED' and dst > 0;
+else:
+    cursor.execute("SELECT calldate, cnum, lastdata, billsec FROM cdr WHERE calldate BETWEEN (%s' '%s) AND (%s' '%s) AND (LENGTH(cnum) < 6) AND (LENGTH(dst) > 5) AND (dst != 'hangup') AND (billsec != '0') AND (lastdata != '') AND (cnum = %s)", (array[1], array[2], array[3], array[4], array[5]))
 
 log.info('End')
 
