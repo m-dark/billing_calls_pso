@@ -84,7 +84,6 @@ for cid in outcid_argv:
             if cursor != '':
                 for row_cursor in cursor:
                     file_calls.write(row_cursor[0]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
-#    select src,dst,billsec,calldate FROM cdr WHERE (LENGTH(src)) > 5 and lastdata!='' and billsec>0 and disposition = 'ANSWERED' and dst > 0;
     else:
         cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (cid))
         if cursor != '':
