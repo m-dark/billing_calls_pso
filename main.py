@@ -83,12 +83,40 @@ for cid in outcid_argv:
             cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (number))
             if cursor != '':
                 for row_cursor in cursor:
-                    file_calls.write(row_cursor[0]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    if len(row_cursor[0]) == 7:
+                        file_calls.write(row_cursor[0]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                        continue
+                    result_number=re.match(r'(343[23])', array_argv[0])
+                    if result_number is None:
+                        file_calls.write(row_cursor[0][3:10]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                        continue
+                    result_number=re.match(r'(7343[23])', array_argv[0])
+                    if result_number is None:
+                        file_calls.write(row_cursor[0][4:11]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                        continue
+                    result_number=re.match(r'(8343[23])', array_argv[0])
+                    if result_number is None:
+                        file_calls.write(row_cursor[0][4:11]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                        continue
     else:
         cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (cid))
         if cursor != '':
             for row_cursor in cursor:
-                file_calls.write(row_cursor[0]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                if len(row_cursor[0]) == 7:
+                    file_calls.write(row_cursor[0]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    continue
+                result_number=re.match(r'(343[23])', array_argv[0])
+                if result_number is None:
+                    file_calls.write(row_cursor[0][3:10]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    continue
+                result_number=re.match(r'(7343[23])', array_argv[0])
+                if result_number is None:
+                    file_calls.write(row_cursor[0][4:11]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    continue
+                result_number=re.match(r'(8343[23])', array_argv[0])
+                if result_number is None:
+                    file_calls.write(row_cursor[0][4:11]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    continue
 file_calls.close()
 cursor.close()
 asteriskcdrdb.close()
