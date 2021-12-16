@@ -45,6 +45,11 @@ if result_time_end is None:
     print('Конечное время имеет не корректный формат (23:59:59)!')
     log.error('Не верный формат времяни конца! '+array_argv[4])
     sys.exit()
+result_numbers=re.match(r'(([3][4][3][23]\d{6}))$', array_argv[5])
+if result_numbers is None:
+    print('Не верный формат номера(ов)!')
+    log.error('Не верный формат номера(ов)! '+array_argv[5])
+    sys.exit()
 
 asteriskdb = pymysql.connect(host="localhost", user="root", passwd="", db="asterisk", charset='utf8')
 cursor_outcid = asteriskdb.cursor()
@@ -59,3 +64,4 @@ else:
 cursor_outcid.close()
 
 log.info('End')
+
