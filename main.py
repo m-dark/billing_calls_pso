@@ -18,7 +18,7 @@ result_date_start=re.match(r'([2][0]\d\d\.([0][1-9]|[1][0-2]).([0][1-9]|[1][0-9]
 if result_date_start is None:
     print('У даты начала не корректный формат (2022.01.01)!')
     sys.exit()
-result_time_start=re.match(r'(\d\d\:\d\d:\d\d)', array_argv[2])
+result_time_start=re.match(r'(([01][0-9]|[2][0-3])\:([0-5][0-9])\:([0-5][0-9]))', array_argv[2])
 if result_time_start is None:
     print('Время начала имеет не корректный формат (00:00:00)!')
     sys.exit()
@@ -26,7 +26,7 @@ result_date_end=re.match(r'([2][0]\d\d\.([0][1-9]|[1][0-2]).([0][1-9]|[1][0-9]|[
 if result_date_end is None:
     print('У конечной даты не корректный формат (2039.01.31)!')
     sys.exit()
-result_time_end=re.match(r'(\d\d\:\d\d:\d\d)', array_argv[4])
+result_time_end=re.match(r'(([01][0-9]|[2][0-3])\:([0-5][0-9])\:([0-5][0-9]))', array_argv[4])
 if result_time_end is None:
     print('Конечное время имеет не корректный формат (23:59:59)!')
     sys.exit()
