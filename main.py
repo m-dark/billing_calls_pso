@@ -80,7 +80,7 @@ file_calls=open(str(dir_log)+str(date_time)+'.csv', 'a')
 for cid in outcid_argv:
     if cid == 'all':
         for number in outcid_db:
-            cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (number))
+            cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and (calldate between %s %s and %s %s) and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (number,array_argv[1],array_argv[2],array_argv[3],array_argv[4]))
             if cursor != '':
                 for row_cursor in cursor:
                     if len(row_cursor[0]) == 7:
@@ -99,7 +99,8 @@ for cid in outcid_argv:
                         file_calls.write(row_cursor[0][4:11]+';'+row_cursor[1]+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
                         continue
     else:
-        cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (cid))
+#        cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (cid))
+        cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and (calldate between %s %s and %s %s) and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (cid,array_argv[1],array_argv[2],array_argv[3],array_argv[4]))
         if cursor != '':
             for row_cursor in cursor:
                 if len(row_cursor[0]) == 7:
