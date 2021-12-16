@@ -1,2 +1,3 @@
+.gitignore
 log/billing_calls_pso.log
 log/*.csv
