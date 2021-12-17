@@ -156,19 +156,19 @@ for cid in outcid_argv:
                     if result_number is not None:
                         number_b='8343'+str(row_cursor[1])
                     if len(row_cursor[0]) == 7:
-                        file_calls.write(row_cursor[0]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                        file_calls.write(row_cursor[0]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                         continue
-                    result_number=re.match(r'(343[23])', array_argv[0])
-                    if result_number is None:
-                        file_calls.write(row_cursor[0][3:10]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    result_number=re.match(r'(343[23]\d{6})$', row_cursor[0])
+                    if result_number is not None:
+                        file_calls.write(row_cursor[0][3:10]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                         continue
-                    result_number=re.match(r'(7343[23])', array_argv[0])
-                    if result_number is None:
-                        file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    result_number=re.match(r'(7343[23]\d{6})$', row_cursor[0])
+                    if result_number is not None:
+                        file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                         continue
-                    result_number=re.match(r'(8343[23])', array_argv[0])
-                    if result_number is None:
-                        file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    result_number=re.match(r'(8343[23]\d{6})$', row_cursor[0])
+                    if result_number is not None:
+                        file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                         continue
     else:
 #        cursor.execute("SELECT src,dst,billsec,calldate FROM cdr WHERE src = %s and lastdata != '' and billsec > '0' and disposition = 'ANSWERED' and dst > '0'", (cid))
@@ -180,19 +180,19 @@ for cid in outcid_argv:
                 if result_number is not None:
                     number_b ='8343'+str(row_cursor[1])
                 if len(row_cursor[0]) == 7:
-                    file_calls.write(row_cursor[0]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                    file_calls.write(row_cursor[0]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                     continue
-                result_number=re.match(r'(343[23])', array_argv[0])
-                if result_number is None:
-                    file_calls.write(row_cursor[0][3:10]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                result_number=re.match(r'(343[23]\d{6})$', row_cursor[0])
+                if result_number is not None:
+                    file_calls.write(row_cursor[0][3:10]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                     continue
-                result_number=re.match(r'(7343[23])', array_argv[0])
-                if result_number is None:
-                    file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                result_number=re.match(r'(7343[23]\d{6})$', row_cursor[0])
+                if result_number is not None:
+                    file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                     continue
-                result_number=re.match(r'(8343[23])', array_argv[0])
-                if result_number is None:
-                    file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+"\n")
+                result_number=re.match(r'(8343[23]\d{6})$', row_cursor[0])
+                if result_number is not None:
+                    file_calls.write(row_cursor[0][4:11]+';'+number_b+';'+str(row_cursor[2])+';'+str(row_cursor[3])+',001;'+"\n")
                     continue
 file_calls.close()
 cursor.close()
